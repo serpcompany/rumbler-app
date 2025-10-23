@@ -1,0 +1,171 @@
+openapi: 3.1.0
+info:
+  title: Rumbler API
+  version: 0.1.1
+servers:
+  - url: https://api.rumbler.dev
+paths:
+  /auth/register:
+    post:
+      summary: Register user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '201': { description: Registered }
+  /auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200': { description: OK }
+  /me/profile:
+    get:
+      summary: Get my profile
+      responses: { '200': { description: OK } }
+    put:
+      summary: Update my profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                weight_class: { type: string }
+                disciplines: { type: array, items: { type: string } }
+                stance: { type: string }
+                height_cm: { type: integer, minimum: 0 }
+                reach_cm: { type: integer, minimum: 0 }
+                experience_level:
+                  type: string
+                  enum: [amateur, pro]
+                dob:
+                  type: string
+                  format: date
+                gender:
+                  type: string
+                  enum: [male, female, nonbinary, prefer_not_to_say]
+                amateur_wins:   { type: integer, minimum: 0 }
+                amateur_losses: { type: integer, minimum: 0 }
+                amateur_draws:  { type: integer, minimum: 0 }
+                pro_wins:       { type: integer, minimum: 0 }
+                pro_losses:     { type: integer, minimum: 0 }
+                pro_draws:      { type: integer, minimum: 0 }
+              required: [ weight_class, disciplines, experience_level ]
+      responses:
+        '200': { description: Updated }
+  /deck:
+    get:
+      summary: Fetch swipe deck
+      parameters:
+        - in: query
+          name: distance_km
+          schema: { type: number }
+        - in: query
+          name: discipline
+          schema: { type: string }
+        - in: query
+          name: experience
+          schema: { type: string, enum: [amateur, pro] }
+        - in: query
+          name: gender
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+  /intents:
+    post:
+      summary: Like/Pass
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target_user_id: { type: string }
+                action: { type: string, enum: [like, pass] }
+      responses: { '201': { description: Created } }
+  /matches:
+    get:
+      summary: List my matches
+      responses: { '200': { description: OK } }
+  /matches/{id}/messages:
+    get:
+      summary: List messages
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses: { '200': { description: OK } }
+    post:
+      summary: Send message
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body: { type: string }
+                media_key: { type: string }
+      responses: { '201': { description: Created } }
+  /gyms:
+    get:
+      summary: List verified gyms
+      responses: { '200': { description: OK } }
+  /bookings:
+    post:
+      summary: Create booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                match_id: { type: string }
+                gym_id: { type: string }
+                start_time: { type: string, format: date-time }
+                ruleset: { type: string }
+      responses:
+        '201': { description: Created }
+  /bookings/{id}/checkin:
+    post:
+      summary: Check-in to gym
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lat: { type: number }
+                lon: { type: number }
+      responses:
+        '200': { description: OK }
