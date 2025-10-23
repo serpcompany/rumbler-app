@@ -1,0 +1,13 @@
+name = "rumbler-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-20"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+APP_NAME = "Rumbler"
+
+[env.staging]
+name = "rumbler-api-staging"
+
+[env.production]
+name = "rumbler-api-prod"

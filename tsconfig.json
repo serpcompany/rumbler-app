@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "module": "NodeNext",
+    "paths": {
+      "@design/*": ["design/*"],
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src", "design", "apps/api/src", "apps/mobile", "types"]
+}

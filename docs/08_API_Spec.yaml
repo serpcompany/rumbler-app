@@ -33,6 +33,31 @@ paths:
                 password: { type: string }
       responses:
         '200': { description: OK }
+components:
+  schemas:
+    DeckFighter:
+      type: object
+      properties:
+        fighterId: { type: string }
+        name: { type: string }
+        age: { type: integer }
+        gender: { type: string }
+        disciplines:
+          type: array
+          items: { type: string }
+        weightClass: { type: string }
+        experience: { type: string }
+        record:
+          type: object
+          properties:
+            amateur: { type: string }
+            professional:
+              type: string
+              nullable: true
+        distanceKm: { type: number }
+        avatarUrl:
+          type: string
+          format: uri
   /me/profile:
     get:
       summary: Get my profile
@@ -74,36 +99,95 @@ paths:
       summary: Fetch swipe deck
       parameters:
         - in: query
-          name: distance_km
-          schema: { type: number }
+          name: distance
+          schema: { type: number, minimum: 1, maximum: 100 }
         - in: query
           name: discipline
           schema: { type: string }
         - in: query
           name: experience
-          schema: { type: string, enum: [amateur, pro] }
+          schema:
+            type: string
+            enum: [beginner, intermediate, advanced, pro]
         - in: query
           name: gender
+          schema:
+            type: string
+            enum: [male, female, non-binary]
+      responses:
+        '200':
+          description: Fighters available for swipe actions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query:
+                    type: object
+                    additionalProperties: true
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DeckFighter'
+  /deck/{fighterId}/like:
+    post:
+      summary: Like a fighter (optimistic match check)
+      parameters:
+        - in: path
+          name: fighterId
+          required: true
           schema: { type: string }
       responses:
-        '200': { description: OK }
-  /intents:
+        '200':
+          description: Like accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  liked: { type: boolean }
+                  match:
+                    type: object
+                    nullable: true
+                    properties:
+                      fighterId: { type: string }
+                      createdAt: { type: string, format: date-time }
+  /deck/{fighterId}/pass:
     post:
-      summary: Like/Pass
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                target_user_id: { type: string }
-                action: { type: string, enum: [like, pass] }
-      responses: { '201': { description: Created } }
+      summary: Pass on a fighter
+      parameters:
+        - in: path
+          name: fighterId
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Pass acknowledged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  passed: { type: boolean }
   /matches:
     get:
       summary: List my matches
-      responses: { '200': { description: OK } }
+      responses:
+        '200':
+          description: Current mutual likes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        fighterId: { type: string }
+                        lastMessage: { type: string }
+                        matchedAt: { type: string, format: date-time }
   /matches/{id}/messages:
     get:
       summary: List messages

@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Rumbler",
+    "slug": "rumbler",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "rumbler",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#030213"
+      },
+      "permissions": []
+    },
+    "extra": {
+      "eas": {
+        "projectId": "00000000-0000-0000-0000-000000000000"
+      },
+      "apiBaseUrl": "http://localhost:8787"
+    }
+  }
+}

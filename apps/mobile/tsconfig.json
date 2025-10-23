@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["es2022"],
+    "types": ["expo", "react", "react-native"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@design/*": ["../../design/*"],
+      "@src/*": ["src/*"]
+    }
+  },
+  "include": ["App.tsx", "src", "app.config.ts", "global.d.ts"]
+}

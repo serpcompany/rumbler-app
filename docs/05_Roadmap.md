@@ -13,3 +13,11 @@ Milestones
 - M2: API ready
 - M3: Mobile Alpha
 - M4: Beta launch
+
+## Sprint 0 Progress (2025-10-23)
+
+- ✅ Monorepo scaffolding live (`apps/api`, `apps/mobile`, shared tokens) with tooling (`pnpm` workspaces, Wrangler 4, Expo SDK 51).
+- ✅ Cloudflare Worker exposes `/health`, `/deck`, and `/me/profile` with Zod validation and 18+ guard (in-memory persistence for now).
+- ✅ Expo app gates navigation on profile completion, implements profile setup form using `react-hook-form` + `zod`, and persists to the Worker API.
+- ✅ Deck swipe loop wired: Worker now supports `/deck/:id/like|pass` with mocked match creation, Expo deck uses gesture-based cards + optimistic analytics, and Matches tab renders fake data from `/matches`.
+- ⏳ Next up: replace in-memory storage with D1 tables, add real matchmaking logic/Durable Objects, and build chat UI fed by `/matches/:id/chat`.
